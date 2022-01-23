@@ -1,0 +1,11 @@
+#compdef aws-vault-chrome aws-vault-profile
+function _vault_profiles() {
+  local -a profiles
+  local IFS=$'\n'
+  profiles=($(aws-vault list --profiles))
+  _describe 'PROFILE' profiles
+}
+function _av_completion() {
+  _arguments "1:PROFILE:_vault_profiles"
+}
+_av_completion "$@"
