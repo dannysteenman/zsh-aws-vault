@@ -12,7 +12,7 @@ alias avp='aws-vault-profile'
 #------------------
 # Functions
 #------------------
-function aws-vault-profile {
+function aws-vault-profile() {
   if [[ -z "$1" ]]; then
     unset AWS_SDK_LOAD_CONFIG
     unset AWS_DEFAULT_PROFILE AWS_PROFILE AWS_EB_PROFILE
@@ -35,7 +35,7 @@ function aws-vault-profile {
   echo "Switched to AWS Profile: ${AWS_PROFILE}"
 }
 
-function aws-vault-chrome {
+function aws-vault-chrome() {
   # set to yes to create one-time use profiles in /tmp
   # anything else will create them in $HOME/.aws/awschrome
   TEMP_PROFILE="yes"
