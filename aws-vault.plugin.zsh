@@ -1,4 +1,9 @@
 #------------------
+# The search path for function definitions
+#------------------
+fpath+="${0:h}"
+
+#------------------
 # Aliases
 #------------------
 alias av='aws-vault'
