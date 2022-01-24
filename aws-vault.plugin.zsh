@@ -51,7 +51,7 @@ function aws-vault-chrome() {
   url=$(aws-vault login $aws_profile --stdout)
   profile_dir_name=${aws_profile//[^a-zA-Z0-9_-]/__}
   user_data_dir=$(mktemp -d /tmp/awschrome_userdata.XXXXXXXX)
-  extension_dir="${HOME}/.aws/awschrome/extensions/i-dont-care-about-cookies"
+  extension_dir=$(fd -td i-dont-care-about-cookies $HOME -H --max-depth 4)
 
   if [[ ${aws_status} -ne 0 ]]; then
     echo ${url}
