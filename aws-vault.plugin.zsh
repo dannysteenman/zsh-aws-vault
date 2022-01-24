@@ -21,21 +21,34 @@ alias avp='aws-vault-profile'
 #------------------
 function aws-vault-profile() {
   local aws_profile=${1:-$AWS_VAULT}
-  if [[ -z "$1" ]]; then
+  if [[ "$AWS_PROFILE" ]]; then
+    echo "Switch from AWS Profile: $AWS_PROFILE to $aws_profile"
     unset AWS_VAULT AWS_SDK_LOAD_CONFIG
     unset AWS_REGION AWS_DEFAULT_REGION
     unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
     unset AWS_PROFILE AWS_DEFAULT_PROFILE AWS_EB_PROFILE
     unset AWS_SESSION_EXPIRATION AWS_SESSION_TOKEN AWS_SECURITY_TOKEN
-    echo AWS Profile cleared.
-    return
-  else
     export AWS_SDK_LOAD_CONFIG=true
     export AWS_PROFILE=$aws_profile
     export AWS_DEFAULT_PROFILE=$aws_profile
     export AWS_EB_PROFILE=$aws_profile
     export $(aws-vault exec $aws_profile -- env | grep AWS)
-    echo "Switched to AWS Profile: ${aws_profile}"
+    return
+  elif [[ -z "$1" ]]; then
+    unset AWS_VAULT AWS_SDK_LOAD_CONFIG
+    unset AWS_REGION AWS_DEFAULT_REGION
+    unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+    unset AWS_PROFILE AWS_DEFAULT_PROFILE AWS_EB_PROFILE
+    unset AWS_SESSION_EXPIRATION AWS_SESSION_TOKEN AWS_SECURITY_TOKEN
+    echo 'AWS Profile cleared.'
+    return
+  else
+    echo "Switch to AWS Profile: ${aws_profile}"
+    export AWS_SDK_LOAD_CONFIG=true
+    export AWS_PROFILE=$aws_profile
+    export AWS_DEFAULT_PROFILE=$aws_profile
+    export AWS_EB_PROFILE=$aws_profile
+    export $(aws-vault exec $aws_profile -- env | grep AWS)
   fi
 }
 
