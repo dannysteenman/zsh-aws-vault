@@ -2,6 +2,14 @@
 
 A zsh plugin for aws-vault which includes completions and cli functions.
 
+## Prerequisites
+
+To make sure the functions in this plugin work properly, install the following packages:
+
+```zsh
+brew install aws-vault fd google-chrome
+```
+
 ## Installation
 
 ### [Antigen](https://github.com/zsh-users/antigen)
@@ -65,6 +73,8 @@ To login to the AWS Console:
 ```zsh
 avc <profile_name>
 ```
+
+Bonus: It's possible to open multiple windows at the same time with different profiles.
 
 ### `avp`
 
