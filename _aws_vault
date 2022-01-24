@@ -1,5 +1,4 @@
 #compdef aws-vault
-
 local context state state_desc line
 local curcontext="$curcontext"
 
