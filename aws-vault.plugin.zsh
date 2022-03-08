@@ -54,30 +54,21 @@ function aws-vault-chrome() {
     return 1
   fi
 
-  aws_status=$?
   url=$(aws-vault login $aws_profile --stdout)
-  profile_dir_name=${aws_profile//[^a-zA-Z0-9_-]/__}
-  user_data_dir=$(mktemp -d /tmp/awschrome_userdata.XXXXXXXX)
-  extension_dir=$(fd -td i-dont-care-about-cookies $HOME -H --max-depth 4)
+  aws_status=$?
 
   if [[ ${aws_status} -ne 0 ]]; then
     echo ${url}
     return ${aws_status}
   fi
 
-  mkdir -p ${user_data_dir}
+  extension_dir=$(fd -td i-dont-care-about-cookies $HOME -H --max-depth 4)
+  user_data_dir=$(mktemp -d /tmp/awschrome_userdata.XXXXXXXX)
   disk_cache_dir=$(mktemp -d /tmp/awschrome_cache.XXXXXXXX)
   /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
-    --disable-background-networking \
-    --disable-breakpad \
-    --disable-default-apps \
-    --disable-domain-reliability \
-    --disable-extensions-except=${extension_dir} \
-    --disable-notifications \
-    --disable-sync \
-    --new-window \
-    --no-default-browser-check \
     --no-first-run \
+    --no-default-browser-check \
+    --disable-extensions-except=${extension_dir} \
     --user-data-dir=${user_data_dir} \
     --disk-cache-dir=${disk_cache_dir} \
     ${url} \
