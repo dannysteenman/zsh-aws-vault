@@ -48,29 +48,22 @@ function aws-vault-profile() {
 
 function aws-vault-chrome() {
   local aws_profile=${1:-$AWS_VAULT}
+  local login_url
 
   if [[ -z "$aws_profile" ]]; then
     echo 'Please add an AWS Profile name e.g. avc <aws_profile>' >&2
     return 1
   fi
 
-  url=$(aws-vault login $aws_profile --stdout)
-  aws_status=$?
+  login_url=$(aws-vault login $aws_profile --stdout)
 
-  if [[ ${aws_status} -ne 0 ]]; then
-    echo ${url}
-    return ${aws_status}
-  fi
-
-  extension_dir=$(fd -td i-dont-care-about-cookies $HOME -H --max-depth 4)
-  user_data_dir=$(mktemp -d /tmp/awschrome_userdata.XXXXXXXX)
-  disk_cache_dir=$(mktemp -d /tmp/awschrome_cache.XXXXXXXX)
   /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
-    --no-first-run \
     --no-default-browser-check \
-    --disable-extensions-except=${extension_dir} \
-    --user-data-dir=${user_data_dir} \
-    --disk-cache-dir=${disk_cache_dir} \
-    ${url} \
+    --no-first-run \
+    --new-window \
+    --disk-cache-dir=$(mktemp -d /tmp/chrome.XXXXXXXX) \
+    --user-data-dir=$(mktemp -d /tmp/chrome.XXXXXXXX) \
+    --disable-extensions-except=$(fd -td i-dont-care-about-cookies $HOME -H --max-depth 4) \
+    ${login_url} \
     >/dev/null 2>&1 &
 }
